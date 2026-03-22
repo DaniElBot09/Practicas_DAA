@@ -10,8 +10,8 @@ import java.io.*;
  * @author diego
  */
 public class PracticaVoraz {
-    
-    public static void main(String[] args){
+
+    public static void main(String[] args) throws IOException{
         ArrayList<int[]> datos = new ArrayList<>();
         Scanner sc = null;
         boolean porTeclado = !(args.length > 0);
@@ -24,37 +24,57 @@ public class PracticaVoraz {
                 sc = new Scanner(System.in);
             }
             if(sc.hasNextInt()){
-                int n = sc.nextInt();
+                int n = sc.nextInt();   // Número de tareas
+                if(n<=0){
+                    throw new IllegalArgumentException("El número de tareas debe ser mayor que 0. ");
+                }
                 for(int i = 0; i < n; i++){
-                    if(porTeclado) {
+                    if(porTeclado){
                         System.out.println("Tarea número... " + i); 
                         System.out.print("Inicio: "); 
                     }
+                    if(!sc.hasNextInt()){
+                        throw new IllegalArgumentException("Se esperaba un entero como inicio. ");
+                    }
                     int inicio = sc.nextInt();
                     if(porTeclado) System.out.print("Fin: ");
+                    if(!sc.hasNextInt()){
+                        throw new IllegalArgumentException("Se esperaba un entero como final. ");
+                    }
                     int fin = sc.nextInt();
                     datos.add(new int[] {inicio, fin});
                 }
+            }else{
+                throw new IllegalArgumentException("Debe introducir el número (entero) de tareas. ");
             }
-
+            
+            //Resolvemos el problema planteado
             ArrayList<Integer> sol = Algoritmo.voraz(new Actividades(datos));
-
+            
+            // Escribimos resultados
             if(args.length > 1){
                 File ficheroSalida = new File(args[1]);
                 if(ficheroSalida.exists()){
                     System.err.println("Error: El fichero de salida '" + args[1] + "' ya existe.");
                     return; 
                 }
-                PrintWriter writer = new PrintWriter(ficheroSalida);
-                writer.println("Tareas seleccionadas: " + sol);
-                writer.close();
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroSalida))) {
+                    bw.write("Tareas seleccionadas: " + sol);
+                    bw.newLine();
+                }
             }else{
-                System.out.println("Selección de tamaño maximal: " + sol);
+                System.out.println("Tareas seleccionadas: " + sol);
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            System.err.println("Error encontrando el fichero de lectura: " + e.getMessage());
+        } catch(InputMismatchException e) {
+            System.err.println("Error: formato de número incorrecto.");
+        } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error al escribir en el fichero: " + e.getMessage());
         } finally {
-            if (sc != null) sc.close();
+            if (!porTeclado && sc != null) sc.close(); 
         }
     }
 }
