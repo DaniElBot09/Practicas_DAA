@@ -12,6 +12,7 @@ import java.util.*;
 public abstract class Algoritmo {
     public static ArrayList<Integer> voraz(Actividades opciones){
         opciones.ordenar();
+        //Recogemos los índices de las posiciones en la lista de las opciones
         ArrayList <Integer> listaIndex = new ArrayList<>();
         if(opciones.size() == 0) return null;     //Si está vacía, salimos
         listaIndex.add(0); 
