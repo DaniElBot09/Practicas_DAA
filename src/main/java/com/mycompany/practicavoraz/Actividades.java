@@ -16,7 +16,7 @@ public class Actividades {
     public Actividades(ArrayList<int[]> lista_new){
         for(int i = 0; i<lista_new.size(); i++){
             int[] intervalo = lista_new.get(i);
-            if (intervalo[0] < 0 || intervalo[1] < 0 || intervalo[1] < intervalo[0]) {
+            if (intervalo[0] < 0 || intervalo[1] < 0 || intervalo[1] <= intervalo[0]) {
                 throw new IllegalArgumentException("Intervalo inválido: [" + intervalo[0] + ", " + intervalo[1] + "]");
             }
             int[] aux = {i, intervalo[0], intervalo[1]};
