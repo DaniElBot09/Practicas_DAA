@@ -1,0 +1,39 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package robottornillo;
+import java.util.Stack;
+
+/**
+ *
+ * @author diego
+ */
+public class RobotTornillo {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Entrada entrada = new Entrada();
+        Salida salida = new Salida();
+        
+        try {
+  
+            entrada.leerDatos(args);
+            Robot robot = new Robot(entrada.getTablero());
+            
+            // 3. El robot busca el tornillo (Vuelta Atrás) 
+            Stack<int[]> camino = robot.buscarTornillo();
+            
+            // 4. Mostramos el resultado (en fichero o pantalla según args) [cite: 36, 52]
+            salida.mostrarResultados(camino, args);
+
+        } catch (Exception e) {
+            System.err.println("\n[ERROR]: " + e.getMessage());
+            System.err.println("El programa no puede continuar.");
+        }
+    }
+}
+// que hacer si hay una pared en el cero cero
+
