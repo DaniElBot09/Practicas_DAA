@@ -1,0 +1,63 @@
+package robottornillo;
+import java.util.Stack;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author diego
+ */
+public class Nodo {
+    private Mapa tablero;
+    private int[] posicion; 
+    private Stack<int[]> camino;
+    private int n; 
+    
+    public Nodo(Mapa tablero,int[] posicion){
+        this.tablero= tablero;
+        this.posicion=posicion;
+        camino = new Stack<>();
+        camino.push(posicion);
+        this.tablero.mover(posicion);
+    }
+    
+    public boolean factible(){
+        return tablero.factible(posicion);
+    }
+    public boolean mover(int[] movimiento){
+        int[] nuevaPos = new int[2];
+        for(int i=0; i<2; i++){
+            nuevaPos[i] = posicion[i] + movimiento[i];
+        }
+        boolean sePuede = tablero.factible(nuevaPos);
+
+        if(sePuede){
+            posicion = nuevaPos;
+            camino.push(nuevaPos);
+            n++;
+            tablero.mover(nuevaPos);
+        }
+        return sePuede;
+    }
+    public void deshacer(int[] movimiento){
+        // tablero.deshacer(posicion);     //Creemos que se puede quitar, por EFICIENCIA
+        int[] posAntigua = new int[2];
+        for(int i=0; i<2; i++){
+            posAntigua[i] = posicion[i] - movimiento[i];
+        }
+
+        posicion = posAntigua;
+        camino.pop();
+        n--;
+       
+    }
+    
+    public boolean win(){
+        return tablero.hayTornillo(posicion);
+    }
+    public Stack<int[]> getCamino(){
+        return camino;
+    }
+}
