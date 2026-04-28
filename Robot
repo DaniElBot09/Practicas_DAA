@@ -1,0 +1,56 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package robottornillo;
+
+import java.util.Stack;
+
+/**
+ *
+ * @author diego
+ */
+public class Robot {
+    private final int[][] movimientos = {{1,0},{0,-1},{-1,0},{0,1}};
+    private boolean encontrado; //Por defecto es false
+    private final int[] posicionInicial = {0,0};
+    private final Nodo nodo;
+    
+    public Robot(int[][] tablero){
+        Mapa mapaUnico = new Mapa(tablero);
+        nodo = new Nodo(mapaUnico,posicionInicial);        
+    }
+            
+            
+    public Stack<int[]> buscarTornillo(){
+        buscarTornillo(nodo);
+        if (encontrado){
+            return nodo.getCamino();
+        }else{
+            return null;
+        }        
+    }
+    
+    public void buscarTornillo(Nodo nodo){
+    if(nodo.win()){
+        encontrado = true;
+        return;
+    }
+    for(int i = 0; i < 4 && !encontrado; i++){
+        if(nodo.mover(movimientos[i])){
+            buscarTornillo(nodo);
+            if(!encontrado){
+                nodo.deshacer(movimientos[i]);
+            }
+        }
+    }
+}
+
+    
+    
+
+
+
+
+
+}
