@@ -1,0 +1,60 @@
+package robottornillo;
+
+import java.util.Stack;
+import java.io.*;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author diego
+ */
+public class Salida {
+    
+public void mostrarResultados(Stack<int[]> camino, String[] args) {
+        boolean enFichero = (args.length > 1);
+
+        if (camino == null) {
+            System.out.println("No se ha encontrado un camino válido al tornillo.");
+            return;
+        }
+
+        if (enFichero) {
+            escribirFichero(camino, args[1]);
+        } else {
+            escribirPantalla(camino);
+        }
+    }
+
+    private void escribirPantalla(Stack<int[]> camino) {
+        System.out.println("Camino de regreso (Tornillo -> Salida):");
+        for (int i = camino.size() - 1; i >= 0; i--) {
+            int[] pos = camino.get(i);
+            System.out.println("[" + pos[0] + "," + pos[1] + "]");
+        }
+    }
+
+    private void escribirFichero(Stack<int[]> camino, String nombreFichero) {
+        File archivo = new File(nombreFichero);
+        if (archivo.exists()) {
+            System.err.println("Error: El fichero de salida '" + nombreFichero + "' ya existe.");
+            return;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+            for (int i = camino.size() - 1; i >= 0; i--) {
+                int[] pos = camino.get(i);
+                bw.write("[" + pos[0] + "," + pos[1] + "]");
+                bw.newLine();
+            }
+            System.out.println("Resultado guardado en " + nombreFichero);
+        } catch (IOException e) {
+            System.err.println("Error al escribir en el fichero: " + e.getMessage());
+        }
+    }
+}
+            
+
