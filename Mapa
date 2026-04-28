@@ -1,0 +1,37 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package robottornillo;
+
+/**
+ *
+ * @author diego
+ */
+public class Mapa {
+    private int[][] tablero;
+    private boolean[][] tableroAux;
+    
+    public Mapa(int[][] tablero){ //Constructor
+        this.tablero=tablero;    //TErminar de ver si por referencia o no
+        this.tableroAux= new boolean[tablero.length][tablero[0].length];
+    }
+    public boolean factible(int[] posicion){
+        int f = posicion[0];
+        int c = posicion[1];
+        boolean sol=(0<=f) && (f<tablero.length) && (0<=c) && (c<tablero[0].length);
+        sol = sol && !tableroAux[f][c] && (0<=c) && !(tablero[f][c] == -1);
+        return sol;   
+    }
+    public void mover(int[] nuevaPos){
+        tableroAux[nuevaPos[0]][nuevaPos[1]] = true;
+    }
+    public boolean hayTornillo(int[] posicion){
+        int f = posicion[0];
+        int c = posicion[1];
+        return tablero[f][c] == 1;
+    }
+    public void deshacer(int[] pos){
+        tableroAux[pos[0]][pos[1]] = false;
+    }
+}
