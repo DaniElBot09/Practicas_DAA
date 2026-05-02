@@ -11,6 +11,7 @@ import java.util.Stack;
  * @author diego
  */
 public class Robot {
+    private long contadorPasos;
     private final int[][] movimientos = {{1,0},{0,-1},{-1,0},{0,1}};
     private boolean encontrado; //Por defecto es false
     private final int[] posicionInicial = {0,0};
@@ -32,6 +33,7 @@ public class Robot {
     }
     
     public void buscarTornillo(Nodo nodo){
+        contadorPasos++; 
     if(nodo.win()){
         encontrado = true;
         return;
@@ -45,12 +47,7 @@ public class Robot {
         }
     }
 }
-
-    
-    
-
-
-
-
-
+    public long getContadorPasos() {
+        return contadorPasos;
+    }
 }
