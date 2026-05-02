@@ -1,0 +1,66 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package robottornillo;
+
+/**
+ *
+ * @author diego
+ */
+public class Test {
+
+private static int[][] generarTableroAzar(int tam, double probabilidadPared) {
+    int[][] tablero = new int[tam][tam];
+    
+    for (int f = 0; f < tam; f++) {
+        for (int c = 0; c < tam; c++) {
+            if (Math.random() < probabilidadPared) {
+                tablero[f][c] = -1;
+            } else {
+                tablero[f][c] = 0;
+            }
+        }
+    }
+    tablero[0][0] = 0;
+    
+    int fTornillo, cTornillo;
+    do {
+        fTornillo = (int) (Math.random() * tam);
+        cTornillo = (int) (Math.random() * tam);
+    } while (fTornillo == 0 && cTornillo == 0);
+    
+    tablero[fTornillo][cTornillo] = 1;
+
+    return tablero;
+}
+
+
+    public void Complejidad(int tamanoMaximo,int intentosPorTamano) {
+        System.out.println("N (Filas)\tCeldas Totales\tTiempo Medio (ms)\tNodos (Media)");
+        System.out.println("----------------------------------------------------------------------");
+
+        for (int i = 2; i <= tamanoMaximo; i++) {
+            long acumuladorNanos = 0;
+            long acumuladorPasos = 0;
+
+            for (int r = 0; r < intentosPorTamano; r++) {
+                int[][] tablero = generarTableroAzar(i, 0.15);
+                Robot robot = new Robot(tablero);
+
+                long inicio = System.nanoTime();
+                robot.buscarTornillo();
+                long fin = System.nanoTime();
+
+                acumuladorNanos += (fin - inicio);
+                acumuladorPasos += robot.getContadorPasos();
+            }
+
+            double tiempoMedioMs = (acumuladorNanos / (double) intentosPorTamano) / 1_000_000.0;
+            double pasosMedios = (double) acumuladorPasos / intentosPorTamano;
+
+            System.out.printf("%d\t\t%d\t\t%.4f\t\t%.1f%n", i, (i * i), tiempoMedioMs, pasosMedios);
+        }
+    }
+
+}

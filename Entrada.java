@@ -1,0 +1,96 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package robottornillo;
+
+import java.io.*;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+
+/**
+ *
+ * @author diego
+ */
+public class Entrada {
+    private int[][] tablero;
+    private int filas;
+    private int columnas;
+    
+    public void leerDatos(String[] args) throws Exception{
+        Scanner sc= null;
+        boolean porTeclado = (args.length==0);
+        
+        try{
+            if(!porTeclado){
+                //leemos ficheros
+                File fichero= new File(args[0]);
+                if(!fichero.exists()){
+                    throw new FileNotFoundException("El fichero de entrada '" + args[0] + "' no existe.");
+                }
+                sc = new Scanner(fichero);
+            }else{
+                //leemos por teclado
+                System.out.println("--- Modo Teclado ---");
+                System.out.print("Introduzca dimensiones: ");
+                
+                sc = new Scanner(System.in);
+                System.out.print("Introduzca numero de filas: ");
+            }
+            if (sc.hasNextInt()) {
+                this.filas = sc.nextInt();
+                System.out.print("Introduzca numero de columnas: ");
+                if (sc.hasNextInt()) { 
+                    this.columnas = sc.nextInt();
+                } else {
+                    throw new InputMismatchException("Falta la segunda dimensión (columnas).");
+                }
+                if (filas <= 0 || columnas <= 0) {
+                    throw new IllegalArgumentException("Las dimensiones deben ser mayores que 0.");
+                }
+                this.tablero = new int[filas][columnas];
+                for (int i = 0; i < filas; i++) {
+                    if (porTeclado) System.out.println("Fila " + i + ":");
+                    for (int j = 0; j < columnas; j++) {
+                        if (sc.hasNextInt()) {
+                            int valor = sc.nextInt();
+                            if (valor != 0 && valor != -1 && valor != 1) {
+                                throw new IllegalArgumentException("Valor inválido en [" + i + "," + j + "]. Solo se permite 0, -1 o 1.");
+                            }
+                            tablero[i][j] = valor;
+                        } else {
+                            throw new InputMismatchException("Faltan datos en la matriz.");
+                        }
+                    }
+                }               
+            }else {
+                String error = sc.next(); 
+                throw new InputMismatchException("Se esperaba un número pero se encontró: " + error);
+            }   
+        } catch (InputMismatchException e) {
+            System.err.println("Error de formato: Se esperaba un número entero.");
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Ha ocurrido un error inesperado: " + e.getMessage()); 
+            throw e;
+        }finally {
+            // Cerramos el scanner
+            if (!porTeclado && sc != null) {
+                sc.close();
+            }
+        }
+    }
+   //getters
+    public int[][] getTablero(){
+        return tablero;
+    }
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+}
